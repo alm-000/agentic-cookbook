@@ -1,0 +1,70 @@
+{
+  "name": "Voice / Booking Agent (template)",
+  "nodes": [
+    {
+      "parameters": { "path": "booking", "options": {} },
+      "id": "trigger",
+      "name": "Conversation (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {},
+      "id": "agent",
+      "name": "Booking Agent (attach your LLM)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [520, 320]
+    },
+    {
+      "parameters": {},
+      "id": "check",
+      "name": "Tool: check_availability",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 180]
+    },
+    {
+      "parameters": {},
+      "id": "book",
+      "name": "Tool: create_booking",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 320]
+    },
+    {
+      "parameters": {},
+      "id": "log",
+      "name": "Tool: log_interaction",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 460]
+    },
+    {
+      "parameters": {
+        "content": "VOICE / BOOKING AGENT\n\nThe agent confirms the chosen slot back to the caller BEFORE create_booking runs — that is the human-in-the-loop step.\nKey bookings on a request ID so retries don't double-book. Hand off to a human for anything out of scope.\nNo calendar/CRM credentials ship with this template.",
+        "height": 280,
+        "width": 360
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 520]
+    }
+  ],
+  "connections": {
+    "Conversation (webhook)": { "main": [[{ "node": "Booking Agent (attach your LLM)", "type": "main", "index": 0 }]] },
+    "Booking Agent (attach your LLM)": {
+      "main": [[
+        { "node": "Tool: check_availability", "type": "main", "index": 0 },
+        { "node": "Tool: create_booking", "type": "main", "index": 0 },
+        { "node": "Tool: log_interaction", "type": "main", "index": 0 }
+      ]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}

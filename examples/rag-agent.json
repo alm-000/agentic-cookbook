@@ -1,0 +1,83 @@
+{
+  "name": "RAG Agent (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ingest-trigger",
+      "name": "Ingest Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 200]
+    },
+    {
+      "parameters": {},
+      "id": "chunk",
+      "name": "Chunk",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [480, 200]
+    },
+    {
+      "parameters": {},
+      "id": "embed-ingest",
+      "name": "Embed (attach your embeddings)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {},
+      "id": "vectorstore",
+      "name": "Vector Store (attach your connection)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [960, 200]
+    },
+    {
+      "parameters": { "path": "rag-ask", "options": {} },
+      "id": "question-trigger",
+      "name": "Ask (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 460]
+    },
+    {
+      "parameters": {},
+      "id": "retrieve",
+      "name": "Retrieve top-k",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [560, 460]
+    },
+    {
+      "parameters": {},
+      "id": "answer-agent",
+      "name": "Answer Agent (attach your LLM)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [840, 460]
+    },
+    {
+      "parameters": {
+        "content": "RAG AGENT\n\nIngestion (top): chunk -> embed -> vector store. Re-run when sources change.\nAnswer (bottom): retrieve top-k -> agent grounded in retrieved context.\n\nAlways have the agent cite the source chunk IDs it used. If retrieval confidence is low, prefer 'not in my sources' over a guess.\nNo credentials ship with this template.",
+        "height": 300,
+        "width": 380
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1180, 200]
+    }
+  ],
+  "connections": {
+    "Ingest Trigger": { "main": [[{ "node": "Chunk", "type": "main", "index": 0 }]] },
+    "Chunk": { "main": [[{ "node": "Embed (attach your embeddings)", "type": "main", "index": 0 }]] },
+    "Embed (attach your embeddings)": { "main": [[{ "node": "Vector Store (attach your connection)", "type": "main", "index": 0 }]] },
+    "Ask (webhook)": { "main": [[{ "node": "Retrieve top-k", "type": "main", "index": 0 }]] },
+    "Retrieve top-k": { "main": [[{ "node": "Answer Agent (attach your LLM)", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}

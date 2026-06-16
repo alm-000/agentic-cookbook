@@ -1,0 +1,66 @@
+{
+  "name": "Browser Automation Agent (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {},
+      "id": "planner",
+      "name": "Planner Agent (attach your LLM)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [520, 320]
+    },
+    {
+      "parameters": {},
+      "id": "executor",
+      "name": "Browser Agent (attach your LLM)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 320]
+    },
+    {
+      "parameters": {},
+      "id": "browser",
+      "name": "Browser Session (attach your service)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1080, 320]
+    },
+    {
+      "parameters": {},
+      "id": "verify",
+      "name": "Verify + Return",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1360, 320]
+    },
+    {
+      "parameters": {
+        "content": "BROWSER AUTOMATION AGENT\n\nPlanner writes the step list; Browser Agent executes against a real session, re-reading the page between steps.\nGuard destructive actions (submit/pay/delete) behind explicit confirmation. Screenshot failures. Prefer an API the moment one exists.\nNo browser-service credentials ship with this template.",
+        "height": 280,
+        "width": 380
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [400, 520]
+    }
+  ],
+  "connections": {
+    "Trigger": { "main": [[{ "node": "Planner Agent (attach your LLM)", "type": "main", "index": 0 }]] },
+    "Planner Agent (attach your LLM)": { "main": [[{ "node": "Browser Agent (attach your LLM)", "type": "main", "index": 0 }]] },
+    "Browser Agent (attach your LLM)": { "main": [[{ "node": "Browser Session (attach your service)", "type": "main", "index": 0 }]] },
+    "Browser Session (attach your service)": { "main": [[{ "node": "Verify + Return", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}

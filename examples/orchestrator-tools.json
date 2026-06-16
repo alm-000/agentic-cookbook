@@ -1,0 +1,61 @@
+{
+  "name": "Orchestrator + Tools (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {},
+      "id": "orchestrator",
+      "name": "Orchestrator Agent (attach your LLM)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [520, 320]
+    },
+    {
+      "parameters": {},
+      "id": "tool-search",
+      "name": "Tool: search",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {},
+      "id": "tool-write",
+      "name": "Tool: write_section",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [800, 440]
+    },
+    {
+      "parameters": {
+        "content": "ORCHESTRATOR + TOOLS\n\nReplace the 'Orchestrator Agent' NoOp with an AI Agent node and attach your model credential.\nReplace each 'Tool:' NoOp with a sub-workflow tool that has a narrow, typed contract.\n\nReliability: constrain tool outputs with a schema, cap the agent loop, and log every tool call.\nNo credentials ship with this template.",
+        "height": 280,
+        "width": 360
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 520]
+    }
+  ],
+  "connections": {
+    "Trigger": { "main": [[{ "node": "Orchestrator Agent (attach your LLM)", "type": "main", "index": 0 }]] },
+    "Orchestrator Agent (attach your LLM)": {
+      "main": [[
+        { "node": "Tool: search", "type": "main", "index": 0 },
+        { "node": "Tool: write_section", "type": "main", "index": 0 }
+      ]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}
