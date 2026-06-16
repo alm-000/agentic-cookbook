@@ -14,6 +14,11 @@ Each pattern is a short write-up plus a runnable, **credential-free** template y
 | 02 | [RAG Agent](patterns/02-rag-agent.md) | Answers must be grounded in *your* knowledge base, not the model's training data. |
 | 03 | [Voice / Booking Agent](patterns/03-voice-booking-agent.md) | A conversational front desk that checks availability and books appointments. |
 | 04 | [Browser Automation Agent](patterns/04-browser-automation-agent.md) | The task lives behind a UI with no API — the agent has to *use the website*. |
+| 05 | [Follow-Up / Chaser Cadence](patterns/05-followup-chaser.md) | Nudge someone on a schedule until they act (pay, send a doc, leave a review) — then stop. |
+| 06 | [Classify & Route (Intake)](patterns/06-classify-route.md) | Inbound items must be understood, categorised, and sent to the right place automatically. |
+| 07 | [Screen & Score](patterns/07-screen-score.md) | A flood of applications/leads must be read, scored against criteria, and ranked. |
+
+These are the building blocks behind real deployed automations — e.g. the [Agenture](https://aiagenture.co.uk/use-cases) product line (AI receptionist, booking manager, quote/document chasers, screeners, reminder & follow-up agents) is assembled from patterns 03, 05, 06 and 07.
 
 ## Principles these patterns follow
 

@@ -1,0 +1,88 @@
+{
+  "name": "Screen & Score (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "New Applications",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {},
+      "id": "extract",
+      "name": "Extract fields (normalise)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [440, 320]
+    },
+    {
+      "parameters": {},
+      "id": "score",
+      "name": "Score vs rubric (LLM + rules)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [660, 320]
+    },
+    {
+      "parameters": {},
+      "id": "tier",
+      "name": "Tier (A / B / C)",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {},
+      "id": "tier-a",
+      "name": "Tier A: fast-track + notify",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1160, 180]
+    },
+    {
+      "parameters": {},
+      "id": "borderline",
+      "name": "Borderline: human review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1160, 320]
+    },
+    {
+      "parameters": {},
+      "id": "tier-c",
+      "name": "Tier C: hold / polite decline",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1160, 460]
+    },
+    {
+      "parameters": {
+        "content": "SCREEN & SCORE\n\nRubric (weighted criteria) lives in config, not the prompt. Return a per-criterion breakdown, not just a number. Hard rules for must-haves, LLM for fuzzy fit. Borderline items -> human review. Strip protected attributes and audit score distributions for bias.\nNo LLM credential or rubric ships with this template.",
+        "height": 280,
+        "width": 380
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 500]
+    }
+  ],
+  "connections": {
+    "New Applications": { "main": [[{ "node": "Extract fields (normalise)", "type": "main", "index": 0 }]] },
+    "Extract fields (normalise)": { "main": [[{ "node": "Score vs rubric (LLM + rules)", "type": "main", "index": 0 }]] },
+    "Score vs rubric (LLM + rules)": { "main": [[{ "node": "Tier (A / B / C)", "type": "main", "index": 0 }]] },
+    "Tier (A / B / C)": {
+      "main": [
+        [{ "node": "Tier A: fast-track + notify", "type": "main", "index": 0 }],
+        [{ "node": "Borderline: human review", "type": "main", "index": 0 }],
+        [{ "node": "Tier C: hold / polite decline", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}

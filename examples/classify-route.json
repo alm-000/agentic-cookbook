@@ -1,0 +1,88 @@
+{
+  "name": "Classify & Route / Intake (template)",
+  "nodes": [
+    {
+      "parameters": { "path": "intake", "options": {} },
+      "id": "trigger",
+      "name": "Inbound (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {},
+      "id": "extract",
+      "name": "Extract / Parse fields",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [440, 320]
+    },
+    {
+      "parameters": {},
+      "id": "classify",
+      "name": "Classifier (+ confidence)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [660, 320]
+    },
+    {
+      "parameters": {},
+      "id": "router",
+      "name": "Route by category",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {},
+      "id": "route-a",
+      "name": "Action A",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1140, 200]
+    },
+    {
+      "parameters": {},
+      "id": "route-b",
+      "name": "Action B",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1140, 340]
+    },
+    {
+      "parameters": {},
+      "id": "fallback",
+      "name": "Fallback: human queue (low confidence)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1140, 480]
+    },
+    {
+      "parameters": {
+        "content": "CLASSIFY & ROUTE (INTAKE)\n\nTaxonomy + per-category actions live in config, not code. Classifier returns a confidence score; below threshold -> human queue, never a guessed bucket. Dedupe on the way in. Log the decision AND its reason.\nNo LLM/destination credentials ship with this template.",
+        "height": 280,
+        "width": 380
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 500]
+    }
+  ],
+  "connections": {
+    "Inbound (webhook)": { "main": [[{ "node": "Extract / Parse fields", "type": "main", "index": 0 }]] },
+    "Extract / Parse fields": { "main": [[{ "node": "Classifier (+ confidence)", "type": "main", "index": 0 }]] },
+    "Classifier (+ confidence)": { "main": [[{ "node": "Route by category", "type": "main", "index": 0 }]] },
+    "Route by category": {
+      "main": [
+        [{ "node": "Action A", "type": "main", "index": 0 }],
+        [{ "node": "Action B", "type": "main", "index": 0 }],
+        [{ "node": "Fallback: human queue (low confidence)", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}

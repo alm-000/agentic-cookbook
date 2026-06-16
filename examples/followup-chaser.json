@@ -1,0 +1,71 @@
+{
+  "name": "Follow-Up / Chaser Cadence (template)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "New Item",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [220, 320]
+    },
+    {
+      "parameters": {},
+      "id": "wait",
+      "name": "Wait (cadence step)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [440, 320]
+    },
+    {
+      "parameters": {},
+      "id": "check",
+      "name": "Done? (re-check source of truth)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 320]
+    },
+    {
+      "parameters": {},
+      "id": "stop",
+      "name": "Stop + Log (completed)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {},
+      "id": "send",
+      "name": "Send Nudge (escalating tone)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [900, 440]
+    },
+    {
+      "parameters": {
+        "content": "FOLLOW-UP / CHASER CADENCE\n\nCheck state BEFORE every send (never chase a paid invoice). Escalate tone across steps defined as data (e.g. day 2 / 5 / 9). Stop on completion, opt-out, or max attempts. Respect quiet hours + timezone. Key each send on (item id, step) so retries don't double-send.\nNo messaging credentials ship with this template.",
+        "height": 280,
+        "width": 380
+      },
+      "id": "note",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 500]
+    }
+  ],
+  "connections": {
+    "New Item": { "main": [[{ "node": "Wait (cadence step)", "type": "main", "index": 0 }]] },
+    "Wait (cadence step)": { "main": [[{ "node": "Done? (re-check source of truth)", "type": "main", "index": 0 }]] },
+    "Done? (re-check source of truth)": {
+      "main": [
+        [{ "node": "Stop + Log (completed)", "type": "main", "index": 0 }],
+        [{ "node": "Send Nudge (escalating tone)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send Nudge (escalating tone)": { "main": [[{ "node": "Wait (cadence step)", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "meta": {}
+}
